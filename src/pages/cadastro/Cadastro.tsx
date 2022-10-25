@@ -1,6 +1,10 @@
-import React, {useState} from "react"
+//to do list
+//validar email
+
+
+import React, { useState} from "react"
 import { Paper, Box } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ButtonCadastrar from "../../components/buttons/ButtonCadastrar"
 import MyInput from "../../components/input/MyInput"
 import { styled } from '@mui/material/styles';
@@ -16,17 +20,15 @@ const LogStyle = styled(Paper)(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    width: '25vw',
-    height: '40vh',
     padding: '25px',
 }))
-
 
 interface Recado {
     id: string,
     titulo: string,
     descricao: string,
 }
+
 interface Usuario {
     name: string,
     email: string,
@@ -34,6 +36,7 @@ interface Usuario {
     recados: Recado[],
 }
 
+let redirect:boolean
 
 function getStorage(key:string):Array<Usuario>{
     return JSON.parse(localStorage.getItem(key) || '[]')
@@ -44,57 +47,72 @@ function setStorage(key:string, usersList:Array<Usuario>):void {
 }
 
 
-export const Cadastro = () => {
+export function Cadastro()  {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [repassword, setRepassword] = useState('')
 
-    function cadastrar(){
-        validarCampos()
-
-        // verificando se já existe o usuario
-        let listandoUsuarios = getStorage('UsersList');
-        let checkUsuarios = listandoUsuarios.some((user) => user.email === email)
-        
-        if (checkUsuarios){
-            alert('Já existe este email em nosso sistema!')
-            return
-        }
-
-        const newUser: Usuario = {
-            name: name,
-            email: email,
-            password: password,
-            recados: []
-        }
-
-        listandoUsuarios.push(newUser)
-        setStorage('UsersList', listandoUsuarios)
-
-        alert("Conta criada")
-
+    const limpaCampos = () => {
         setName('')
         setEmail('')
         setPassword('')
         setRepassword('')
     }
 
-    function validarCampos():Boolean{
+    const validarCampos = ():Boolean =>{
 
         if(!name || !email || !password || !repassword){
             alert('Preencha todos os campos!')
+            limpaCampos()
             return false
         }
         if(password !== repassword){
             alert('As senhas não conferem!')
+            limpaCampos()
             return false
-        }return true
+        }
+        return true
+    }
+
+    const cadastrar = () => {
+        if (validarCampos()){
+
+            // verificando se já existe o usuario
+            let listandoUsuarios = getStorage('UsersList');
+            let checkUsuarios = listandoUsuarios.some((user) => user.email === email)
+            
+            if (checkUsuarios){
+                alert('Já existe este email em nosso sistema!')
+                limpaCampos()
+                return false
+            }
+
+            const newUser: Usuario = {
+                name: name,
+                email: email,
+                password: password,
+                recados: []
+            }
+
+            listandoUsuarios.push(newUser)
+            setStorage('UsersList', listandoUsuarios)
+
+            alert("Conta criada")
+            limpaCampos()
+            redirect = true
+
+        }
+        return true
+    }
+
+    let navigate = useNavigate()
+    if (redirect){
+        navigate('/')
     }
     
-
-
+    
     return (
         <DivStyle>
             <LogStyle elevation={8}>

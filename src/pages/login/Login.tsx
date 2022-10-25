@@ -16,8 +16,7 @@ const LogStyle = styled(Paper)(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    width: '25vw',
-    height: '40vh',
+    padding: '25px'
 }))
 
 export const Login = () => {
