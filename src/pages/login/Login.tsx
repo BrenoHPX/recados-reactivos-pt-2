@@ -24,8 +24,8 @@ export const Login = () => {
     return (
         <DivStyle>
             <LogStyle elevation={8}>
-                <MyInput name='Email' label='Email' />
-                <MyInput name='Password' label='Senha' />
+                <MyInput label='Email' />
+                <MyInput label='Senha' />
                 <ButtonLogin></ButtonLogin>
                 <Link to={"/cadastro"}>Não possui conta?</Link>
             </LogStyle>

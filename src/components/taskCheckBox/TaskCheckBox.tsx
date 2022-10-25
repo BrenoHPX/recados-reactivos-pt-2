@@ -1,13 +1,11 @@
 import * as React from 'react';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import {FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 export default function TaskCheckBox() {
     return (
-        <FormGroup>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Feito" />
-            <FormControlLabel control={<Checkbox />} label="À Fazer" />
-        </FormGroup>
+        <RadioGroup name="use-radio-group" defaultValue="">
+            <FormControlLabel value="completo" control={<Radio color="success" />} label="Completo" />
+            <FormControlLabel value="incompleto" control={<Radio color="error" />} label="Incompleto" />
+        </RadioGroup>
     );
 }

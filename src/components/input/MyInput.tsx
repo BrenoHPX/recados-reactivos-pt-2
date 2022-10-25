@@ -3,12 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 interface InputProps {
-    name: string;
     label: string;
-    id: string;
+    type: string,
+    value: string,
+    onChange:React.ChangeEventHandler<HTMLInputElement>
 }
 
-export default function MyInput({ name, label, id }: Partial<InputProps>) {
+export default function MyInput({ label, type, value, onChange }: Partial<InputProps>) {
+    
     return (
         <Box
             component="form"
@@ -21,10 +23,10 @@ export default function MyInput({ name, label, id }: Partial<InputProps>) {
             <div>
                 <TextField
                     required
-                    id={id}
-                    name={name}
+                    type={type}
                     label={label}
-                    defaultValue=""
+                    value={value}
+                    onChange={onChange}
                 />
             </div>
         </Box>
