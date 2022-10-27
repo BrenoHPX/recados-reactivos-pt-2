@@ -36,8 +36,6 @@ interface Usuario {
     recados: Recado[],
 }
 
-let redirect:boolean
-
 function getStorage(key:string):Array<Usuario>{
     return JSON.parse(localStorage.getItem(key) || '[]')
 }
@@ -68,6 +66,10 @@ export function Cadastro()  {
             limpaCampos()
             return false
         }
+        if(password.length > 5 && password.length < 10){
+            alert('A senha deve ter entre 5 e 10 caracteres!')
+            return false
+        }
         if(password !== repassword){
             alert('As senhas não conferem!')
             limpaCampos()
@@ -80,8 +82,8 @@ export function Cadastro()  {
         if (validarCampos()){
 
             // verificando se já existe o usuario
-            let listandoUsuarios = getStorage('UsersList');
-            let checkUsuarios = listandoUsuarios.some((user) => user.email === email)
+            let listaUsuarios = getStorage('UsersList');
+            let checkUsuarios = listaUsuarios.some((user) => user.email === email)
             
             if (checkUsuarios){
                 alert('Já existe este email em nosso sistema!')
@@ -96,22 +98,19 @@ export function Cadastro()  {
                 recados: []
             }
 
-            listandoUsuarios.push(newUser)
-            setStorage('UsersList', listandoUsuarios)
+            listaUsuarios.push(newUser)
+            setStorage('UsersList', listaUsuarios)
 
             alert("Conta criada")
             limpaCampos()
-            redirect = true
+            navigate('/')
 
         }
         return true
     }
 
     let navigate = useNavigate()
-    if (redirect){
-        navigate('/')
-    }
-    
+   
     
     return (
         <DivStyle>
@@ -126,3 +125,5 @@ export function Cadastro()  {
         </DivStyle>
     )
 }
+
+export {getStorage, setStorage}
