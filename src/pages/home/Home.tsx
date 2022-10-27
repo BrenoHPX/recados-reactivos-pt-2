@@ -3,7 +3,7 @@ import React, {useState} from "react"
 import MyInput from "../../components/input/MyInput"
 import ListaTarefas from "../../components/listaTarefas/ListaTarefas"
 import UserBar from "../../components/userBar/UserBar"
-// import { getStorage } from "../cadastro/Cadastro"
+import { getStorage, setStorage } from "../cadastro/Cadastro"
 
 interface Usuario {
     name: string,
@@ -17,65 +17,111 @@ interface Recado {
     id: number,
 }
 
-const usuarioLogado = localStorage.getItem('UsuarioLogado')
-// const listaUsuarios = JSON.parse(localStorage.getItem('UsersList') || '[]') 
+
 
 export function Home() {
 
     const [titulo, setTitulo] = useState('')
     const [descricao, setDescricao] = useState('')
 
-    function procurarUsuarios(): Usuario[] {
-        return JSON.parse(localStorage.getItem('UsersList') || '[]')
+    const atualizarLista = () => {
+        const arrUsuarios = getStorage('UsersList');
+        const usuarioLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
+        
+        arrUsuarios.forEach((userObject) => {
+                if(userObject.email===usuarioLogado){
+                   printList()
+                }
+        })
+
+        const printList = () => {
+
+        }
     }
 
-    function salvarRecado(): void{
-
+    const salvarRecado = () => {
+                
         const novoRecado: Recado = {
             titulo: titulo,
             descricao: descricao,
             id: Math.floor(Math.random() * Date.now())
         }
 
-        let usuario = acharUsuario() 
-
-        usuario.recados.push(novoRecado)
-
-        atualizarDados(usuario)
-
-        montarHtml(novoRecado)
-
-    }
-
-    // pegar os inputs
-    // valor dor inputs -> objeto (novoRecado)
-    // recado dar um push no usuario logado
-    
-    // pegar a lista de usuarios
-    // localizar usuario logado
-    // push novoRecado nos recados do usuario logado
-
-    function acharUsuario(): Usuario {
-        let listaUsuario = procurarUsuarios();
-        return listaUsuario.find((user) => user.email === usuarioLogado) as Usuario
-    }
-
-    function atualizarDados (dados: Usuario) {
-        let listaUsuario = procurarUsuarios()
-        let usuarioEncontrado = listaUsuario.findIndex((valor) => valor.email === dados.email)
-
-        listaUsuario[usuarioEncontrado] = dados
+        const arrUsuarios = getStorage('UsersList');
+        const usuarioLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
         
-        atualizarStorage(listaUsuario)
+        arrUsuarios.forEach((userObject) => {
+                if(userObject.email===usuarioLogado){
+                    userObject.recados?.push(novoRecado)
+                }
+        })
+
+        setStorage('UsersList', arrUsuarios)
+        setDescricao('')
+        setTitulo('')        
+
     }
 
-    function atualizarStorage(usuario: Usuario[]): void{
-        localStorage.setItem('UsersList', JSON.stringify(usuario))
-    }
 
-    function montarHtml(Recado: Recado){
 
-    }
+
+
+
+
+
+
+
+
+
+// const usuarioLogado = localStorage.getItem('UsuarioLogado')
+// const listaUsuarios = JSON.parse(localStorage.getItem('UsersList') || '[]') 
+
+
+    // function procurarUsuarios(): Usuario[] {
+    //     return JSON.parse(localStorage.getItem('UsersList') || '[]')
+    // }
+
+    // function salvarRecado(): void{
+
+    //     const novoRecado: Recado = {
+    //         titulo: titulo,
+    //         descricao: descricao,
+    //         id: Math.floor(Math.random() * Date.now())
+    //     }
+
+    //     let usuario = acharUsuario() 
+
+    //     usuario.recados.push(novoRecado)
+
+    //     atualizarDados(usuario)
+
+    //     montarHtml(novoRecado)
+
+    // }
+
+    
+
+    // function acharUsuario(): Usuario {
+    //     let listaUsuario = procurarUsuarios();
+    //     return listaUsuario.find((user) => user.email === usuarioLogado) as Usuario
+    // }
+
+    // function atualizarDados (dados: Usuario) {
+    //     let listaUsuario = procurarUsuarios()
+    //     let usuarioEncontrado = listaUsuario.findIndex((valor) => valor.email === dados.email)
+
+    //     listaUsuario[usuarioEncontrado] = dados
+        
+    //     atualizarStorage(listaUsuario)
+    // }
+
+    // function atualizarStorage(usuario: Usuario[]): void{
+    //     localStorage.setItem('UsersList', JSON.stringify(usuario))
+    // }
+
+    // function montarHtml(Recado: Recado){
+
+    // }
 
         // const listaUsuarios = getStorage('UsersList')
         // const usuarioLogado = getStorage('UsuarioLogado')
@@ -98,7 +144,7 @@ export function Home() {
                 <MyInput value={descricao} type="text" label='Descrição' onChange={(e)=>setDescricao(e.target.value)}/>
                 <Button onClick={salvarRecado} variant="contained">Salvar</Button>
             </Stack>
-            <ListaTarefas />
+            <ListaTarefas recados= />
         </>
     )
     }

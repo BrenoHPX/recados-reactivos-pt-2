@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Recado } from '../../pages/cadastro/Cadastro';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,12 +42,17 @@ function createData(
   return { titulo, descricao, status, acao};
 }
 
-const rows = [
-  createData('Aprender React', 'Dar com a cabeça no teclado', 'concluido'),
-  createData('Arrumar trampo', 'Fazer boas entrevistas', 'incompleto'),
-];
+// const rows = [
+//   createData('Aprender React', 'Dar com a cabeça no teclado', 'concluido'),
+//   createData('Arrumar trampo', 'Fazer boas entrevistas', 'incompleto'),
+// ];
 
-export default function ListaTarefas() {
+interface ListaTarefasProps {
+  listaRecados:Array<Recado>
+}
+
+
+export default function ListaTarefas<ListaTarefasProps>({listaRecados}) {
   return (
     <>
     <TableContainer component={Paper}>
@@ -60,10 +66,10 @@ export default function ListaTarefas() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {listaRecados.map((recado) => (
             <StyledTableRow>
-              <StyledTableCell align="center">{row.titulo}</StyledTableCell>
-              <StyledTableCell align="center">{row.descricao}</StyledTableCell>
+              <StyledTableCell align="center">{recado.titulo}</StyledTableCell>
+              <StyledTableCell align="center">{recado.descricao}</StyledTableCell>
               <StyledTableCell align="center">
                <RadioGroup name="use-radio-group" defaultValue="">
                   <FormControlLabel value="completo" control={<Radio color="success" />} label="Completo" />

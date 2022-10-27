@@ -24,16 +24,16 @@ const LogStyle = styled(Paper)(() => ({
 }))
 
 interface Recado {
-    id: string,
+    id: number,
     titulo: string,
     descricao: string,
 }
 
 interface Usuario {
-    name: string,
+    name?: string,
     email: string,
     password?: string,
-    recados?: Recado[],
+    recados?: Array<Recado>,
 }
 
 function getStorage(key:string):Array<Usuario>{
@@ -127,4 +127,4 @@ export function Cadastro()  {
 }
 
 export { getStorage, setStorage }
-export type { Usuario }
+export type { Usuario, Recado }
