@@ -32,8 +32,8 @@ interface Recado {
 interface Usuario {
     name: string,
     email: string,
-    password: string,
-    recados: Recado[],
+    password?: string,
+    recados?: Recado[],
 }
 
 function getStorage(key:string):Array<Usuario>{
@@ -126,4 +126,5 @@ export function Cadastro()  {
     )
 }
 
-export {getStorage, setStorage}
+export { getStorage, setStorage }
+export type { Usuario }

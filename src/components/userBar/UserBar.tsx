@@ -11,15 +11,26 @@ interface BarProps {
 }
 
 export default function UserBar({ usuario }: BarProps) {
+
+  const logout = () => {
+    localStorage.removeItem('UsuarioLogado')
+  }
+
+  // const imprimirNome: Usuario = () => {
+    
+  // } 
+
+  // const listaUsuarios = JSON.parse(localStorage.getItem('UsersList') || '[]')
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Bem vinda {usuario}!
+            Bem vindo(a) {usuario}!
           </Typography>
           <Link to='/'>
-            <Button color="inherit">Logout</Button>
+            <Button onClick={logout} color="inherit">Logout</Button>
           </Link>
         </Toolbar>
       </AppBar>
