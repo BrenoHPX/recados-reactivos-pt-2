@@ -24,19 +24,13 @@ export function Home() {
     const [titulo, setTitulo] = useState('')
     const [descricao, setDescricao] = useState('')
 
-    const atualizarLista = () => {
+    const ImprimirLista = () => {
         const arrUsuarios = getStorage('UsersList');
         const usuarioLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
+       //encontrar usuario no array de usuarios
+       //criar um componente de recado (row)
+       //criar uma função de impressão de recados
         
-        arrUsuarios.forEach((userObject) => {
-                if(userObject.email===usuarioLogado){
-                   printList()
-                }
-        })
-
-        const printList = () => {
-
-        }
     }
 
     const salvarRecado = () => {
@@ -144,7 +138,7 @@ export function Home() {
                 <MyInput value={descricao} type="text" label='Descrição' onChange={(e)=>setDescricao(e.target.value)}/>
                 <Button onClick={salvarRecado} variant="contained">Salvar</Button>
             </Stack>
-            <ListaTarefas recados= />
+            <ListaTarefas />
         </>
     )
     }

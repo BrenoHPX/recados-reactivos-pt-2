@@ -7,11 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import {FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { Recado } from '../../pages/cadastro/Cadastro';
+import { getStorage} from '../../pages/cadastro/Cadastro';
+import RecadoRow from '../recadoRow/RecadoRow';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -23,36 +20,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
-function createData(
-  titulo: string,
-  descricao: string,
-  status: string,
-  acao?: string,
-) {
-  return { titulo, descricao, status, acao};
-}
-
-// const rows = [
-//   createData('Aprender React', 'Dar com a cabeça no teclado', 'concluido'),
-//   createData('Arrumar trampo', 'Fazer boas entrevistas', 'incompleto'),
-// ];
-
-interface ListaTarefasProps {
-  listaRecados:Array<Recado>
-}
+const emailLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
+const listaUsuarios = getStorage('UsersList')
+const usuarioLogado = listaUsuarios.find((user)=>user.email===emailLogado)
+const listaRecados = usuarioLogado?.recados!
 
 
-export default function ListaTarefas<ListaTarefasProps>({listaRecados}) {
+export default function ListaTarefas() {
   return (
     <>
     <TableContainer component={Paper}>
@@ -66,22 +40,9 @@ export default function ListaTarefas<ListaTarefasProps>({listaRecados}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {listaRecados.map((recado) => (
-            <StyledTableRow>
-              <StyledTableCell align="center">{recado.titulo}</StyledTableCell>
-              <StyledTableCell align="center">{recado.descricao}</StyledTableCell>
-              <StyledTableCell align="center">
-               <RadioGroup name="use-radio-group" defaultValue="">
-                  <FormControlLabel value="completo" control={<Radio color="success" />} label="Completo" />
-                  <FormControlLabel value="incompleto" control={<Radio color="error" />} label="Incompleto" />
-                </RadioGroup>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                    <Button style={{marginRight: "0.5em"}} variant="contained" startIcon={<EditIcon />} color="success" >Editar</Button>
-                    <Button variant="contained" color="error" startIcon={<DeleteIcon />}>Excluir</Button>
-                </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {listaRecados.map((recado)=>{
+            return <RecadoRow titulo={recado.titulo} descricao={recado.descricao}></RecadoRow>
+          })}
         </TableBody>
       </Table>
     </TableContainer>
