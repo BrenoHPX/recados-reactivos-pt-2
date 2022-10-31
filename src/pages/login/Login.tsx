@@ -1,10 +1,13 @@
+// @ ts-nocheck
 import React, { useState } from "react"
 import { Box, Paper } from "@mui/material"
 import { Link, useNavigate } from "react-router-dom"
 import ButtonLogin from "../../components/buttons/ButtonLogin"
 import MyInput from "../../components/input/MyInput"
 import { styled } from '@mui/material/styles';
-import { getStorage, Usuario } from "../cadastro/Cadastro"
+import { setUserOn, User } from "../../store/usuariosSlice"
+import { useDispatch,useSelector} from 'react-redux';
+import { userSelectAll} from "../../store/usuariosSlice"
 
 const DivStyle = styled(Box)(() => ({
     display: 'flex',
@@ -21,32 +24,39 @@ const LogStyle = styled(Paper)(() => ({
 }))
 
 
-
 export function Login(): JSX.Element {
+
+    const dispatch=useDispatch()
+    
+    const usersRedux=useSelector(userSelectAll)
 
     let navigate = useNavigate()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    function setLogado(key:string, user:Usuario): void{
-        localStorage.setItem(key, JSON.stringify(user.email))
-    }
+    
     
     const Logar = () => {
-        const listaUsuarios = getStorage('UsersList');
-        const usuarioLogado = listaUsuarios.find((user)=>(user.email === email && user.password === password))
+
+        const usuarioLogado = usersRedux.usersList.find((user:User)=>(user.email === email && user.password === password))
+console.log(usuarioLogado);
 
         if(!usuarioLogado){
             alert("Email ou senha incorretas")
             setEmail('')
             setPassword('')
-            return
         }else {
-            setLogado('UsuarioLogado', usuarioLogado)
+            const avatar=usuarioLogado?.nome?.substring(0,1)
+            const usuarioOn={
+                id:usuarioLogado.id,
+                nome:usuarioLogado.nome,
+                avatar,
+            }
+            
+            dispatch(setUserOn(usuarioOn))
             navigate('/home')
         }
-
     }
 
     return (

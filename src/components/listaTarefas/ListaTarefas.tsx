@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from "react"
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,8 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getStorage} from '../../pages/cadastro/Cadastro';
 import RecadoRow from '../recadoRow/RecadoRow';
+import { SoulTechState } from "../../store/rootReducer";
+import {useSelector} from 'react-redux';
+import { Recado } from "../../pages/cadastro/Cadastro";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -20,17 +22,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const emailLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
-const listaUsuarios = getStorage('UsersList')
-const usuarioLogado = listaUsuarios.find((user)=>user.email===emailLogado)
-const listaRecados = usuarioLogado?.recados!
-
-
 export default function ListaTarefas() {
+  const recadosList=useSelector((state:SoulTechState)=>state.recados.recadosList)
+  const[row, setRow]=useState<Recado[]>([])
+
+  useEffect(()=>{
+    if (recadosList.length) {
+      setRow(recadosList)
+    }
+  },[recadosList])
+  
   return (
     <>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
+
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Título</StyledTableCell>
@@ -39,11 +45,17 @@ export default function ListaTarefas() {
             <StyledTableCell align="center">Ação</StyledTableCell>
           </TableRow>
         </TableHead>
+
+       {row.length&&(
         <TableBody>
-          {listaRecados.map((recado)=>{
-            return <RecadoRow titulo={recado.titulo} descricao={recado.descricao}></RecadoRow>
-          })}
-        </TableBody>
+          {
+           row.map((recado)=>{
+              return <RecadoRow titulo={recado.titulo} descricao={recado.descricao}></RecadoRow>
+            })
+          }
+          </TableBody>
+       )} 
+
       </Table>
     </TableContainer>
     </>

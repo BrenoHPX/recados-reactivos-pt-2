@@ -1,134 +1,37 @@
+//inicializa em branco
 import { Button, Stack } from "@mui/material"
 import React, {useState} from "react"
 import MyInput from "../../components/input/MyInput"
 import ListaTarefas from "../../components/listaTarefas/ListaTarefas"
 import UserBar from "../../components/userBar/UserBar"
-import { getStorage, setStorage } from "../cadastro/Cadastro"
-
-interface Usuario {
-    name: string,
-    email: string,
-    password: string,
-    recados: Recado[],
-}
-interface Recado {
-    titulo: string,
-    descricao: string,
-    id: number,
-}
-
+import { setUserOff } from "../../store/usuariosSlice"
+import { useDispatch,useSelector} from 'react-redux';
+import { SoulTechState } from "../../store/rootReducer"
+import { Recado, setNewRecado } from "../../store/recadosSlice"
 
 
 export function Home() {
-
+const dispacth=useDispatch()
+const userlogado=useSelector(({usuarios}:SoulTechState)=>usuarios.userOn!)
     const [titulo, setTitulo] = useState('')
     const [descricao, setDescricao] = useState('')
 
-    const ImprimirLista = () => {
-        const arrUsuarios = getStorage('UsersList');
-        const usuarioLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
-       //encontrar usuario no array de usuarios
-       //criar um componente de recado (row)
-       //criar uma função de impressão de recados
-        
-    }
-
     const salvarRecado = () => {
                 
-        const novoRecado: Recado = {
+        const novoRecado: Recado = { 
+            id: String(Math.floor(Math.random() * Date.now())),
             titulo: titulo,
-            descricao: descricao,
-            id: Math.floor(Math.random() * Date.now())
+            descricao: descricao,           
+            userId:userlogado.id
         }
-
-        const arrUsuarios = getStorage('UsersList');
-        const usuarioLogado = JSON.parse(localStorage.getItem('UsuarioLogado')!);
-        
-        arrUsuarios.forEach((userObject) => {
-                if(userObject.email===usuarioLogado){
-                    userObject.recados?.push(novoRecado)
-                }
-        })
-
-        setStorage('UsersList', arrUsuarios)
-        setDescricao('')
-        setTitulo('')        
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-// const usuarioLogado = localStorage.getItem('UsuarioLogado')
-// const listaUsuarios = JSON.parse(localStorage.getItem('UsersList') || '[]') 
-
-
-    // function procurarUsuarios(): Usuario[] {
-    //     return JSON.parse(localStorage.getItem('UsersList') || '[]')
-    // }
-
-    // function salvarRecado(): void{
-
-    //     const novoRecado: Recado = {
-    //         titulo: titulo,
-    //         descricao: descricao,
-    //         id: Math.floor(Math.random() * Date.now())
-    //     }
-
-    //     let usuario = acharUsuario() 
-
-    //     usuario.recados.push(novoRecado)
-
-    //     atualizarDados(usuario)
-
-    //     montarHtml(novoRecado)
-
-    // }
-
+       setDescricao('')
+        setTitulo('')
+   
+        dispacth(setNewRecado(novoRecado))
+      }     
+       
     
 
-    // function acharUsuario(): Usuario {
-    //     let listaUsuario = procurarUsuarios();
-    //     return listaUsuario.find((user) => user.email === usuarioLogado) as Usuario
-    // }
-
-    // function atualizarDados (dados: Usuario) {
-    //     let listaUsuario = procurarUsuarios()
-    //     let usuarioEncontrado = listaUsuario.findIndex((valor) => valor.email === dados.email)
-
-    //     listaUsuario[usuarioEncontrado] = dados
-        
-    //     atualizarStorage(listaUsuario)
-    // }
-
-    // function atualizarStorage(usuario: Usuario[]): void{
-    //     localStorage.setItem('UsersList', JSON.stringify(usuario))
-    // }
-
-    // function montarHtml(Recado: Recado){
-
-    // }
-
-        // const listaUsuarios = getStorage('UsersList')
-        // const usuarioLogado = getStorage('UsuarioLogado')
-        // console.log (typeof usuarioLogado)
-
-        // listaUsuarios.some((user)=>user.email === usuarioLogado)    
-
-        // function encontrarUsuario(){
-        //     let usuario = getStorage('UsersList')
-        //     usuario.find((user) => user.email === usuarioLogado)
-        // }
-
-    
 
     return (
         <>
@@ -142,3 +45,4 @@ export function Home() {
         </>
     )
     }
+

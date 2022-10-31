@@ -4,7 +4,9 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
+import { useDispatch} from 'react-redux';
+import { setUserOff } from "../../store/usuariosSlice"
 
 interface BarProps {
   usuario: string;
@@ -12,15 +14,15 @@ interface BarProps {
 
 export default function UserBar({ usuario }: BarProps) {
 
+  let navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
   const logout = () => {
-    localStorage.removeItem('UsuarioLogado')
+    dispatch(setUserOff())
+    navigate('/')
   }
 
-  // const imprimirNome: Usuario = () => {
-    
-  // } 
-
-  // const listaUsuarios = JSON.parse(localStorage.getItem('UsersList') || '[]')
 
   return (
     <Box sx={{ flexGrow: 1 }}>

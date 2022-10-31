@@ -1,6 +1,4 @@
-//to do list
-//validar email
-
+// @ ts-nocheck
 
 import React, { useState} from "react"
 import { Paper, Box } from "@mui/material"
@@ -8,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom"
 import ButtonCadastrar from "../../components/buttons/ButtonCadastrar"
 import MyInput from "../../components/input/MyInput"
 import { styled } from '@mui/material/styles';
+import { useDispatch,useSelector} from 'react-redux';
+import { setNewUser, userSelectAll, UserState,User } from "../../store/usuariosSlice"
 
 const DivStyle = styled(Box)(() => ({
     display: 'flex',
@@ -30,22 +30,17 @@ interface Recado {
 }
 
 interface Usuario {
+    id: number,
     name?: string,
     email: string,
     password?: string,
     recados?: Array<Recado>,
 }
 
-function getStorage(key:string):Array<Usuario>{
-    return JSON.parse(localStorage.getItem(key) || '[]')
-}
-
-function setStorage(key:string, usersList:Array<Usuario>):void {
-    localStorage.setItem(key, JSON.stringify(usersList));
-}
-
-
 export function Cadastro()  {
+    const dispatch=useDispatch()
+
+    const usersRedux:UserState=useSelector(userSelectAll)
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -66,7 +61,7 @@ export function Cadastro()  {
             limpaCampos()
             return false
         }
-        if(password.length > 5 && password.length < 10){
+        if(password.length < 5 && password.length > 10){
             alert('A senha deve ter entre 5 e 10 caracteres!')
             return false
         }
@@ -82,8 +77,7 @@ export function Cadastro()  {
         if (validarCampos()){
 
             // verificando se já existe o usuario
-            let listaUsuarios = getStorage('UsersList');
-            let checkUsuarios = listaUsuarios.some((user) => user.email === email)
+            let checkUsuarios = usersRedux.usersList.some((user:User) => user.email === email)
             
             if (checkUsuarios){
                 alert('Já existe este email em nosso sistema!')
@@ -92,14 +86,13 @@ export function Cadastro()  {
             }
 
             const newUser: Usuario = {
+                id: Math.floor(Math.random() * Date.now()),
                 name: name,
                 email: email,
-                password: password,
-                recados: []
+                password: password,           
             }
-
-            listaUsuarios.push(newUser)
-            setStorage('UsersList', listaUsuarios)
+           
+            dispatch(setNewUser(newUser))
 
             alert("Conta criada")
             limpaCampos()
@@ -126,5 +119,4 @@ export function Cadastro()  {
     )
 }
 
-export { getStorage, setStorage }
 export type { Usuario, Recado }
