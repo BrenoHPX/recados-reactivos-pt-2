@@ -13,9 +13,9 @@ const persistConfig={
 const persistRedux=persistReducer(persistConfig,combineReducer)
 
 const store=configureStore({
-reducer:persistRedux,
-middleware:[thunk],
-devTools: process.env.NODE_ENV !== 'production',
+    reducer:persistRedux,
+    middleware:[thunk],
+    devTools: process.env.NODE_ENV !== 'production',
 })
 
 const persistor=persistStore(store)
