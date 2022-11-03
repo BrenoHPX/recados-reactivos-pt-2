@@ -14,9 +14,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-    <CssBaseline/>
-    <AppRoutes />
-    </PersistGate>
-</Provider>
+        <CssBaseline/>
+        <AppRoutes />
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );

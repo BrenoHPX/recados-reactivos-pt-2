@@ -1,38 +1,41 @@
 //inicializa em branco
 import { Button, Stack } from "@mui/material"
-import React, {useState} from "react"
 import MyInput from "../../components/input/MyInput"
 import ListaTarefas from "../../components/listaTarefas/ListaTarefas"
 import UserBar from "../../components/userBar/UserBar"
-import { setUserOff } from "../../store/usuariosSlice"
-import { useDispatch,useSelector} from 'react-redux';
-import { SoulTechState } from "../../store/rootReducer"
+import { userSelectLogged } from "../../store/usuariosSlice"
+import { useDispatch} from 'react-redux';
 import { Recado, setNewRecado } from "../../store/recadosSlice"
+import { v4 as uuidv4 } from "uuid";
+import { useAppSelector } from "../../store/modules/hooks"
+import { useState } from "react";
 
 
 export function Home() {
+
 const dispacth=useDispatch()
-const userlogado=useSelector(({usuarios}:SoulTechState)=>usuarios.userOn!)
+
+const userLogado = useAppSelector(userSelectLogged)
+
     const [titulo, setTitulo] = useState('')
     const [descricao, setDescricao] = useState('')
 
     const salvarRecado = () => {
                 
         const novoRecado: Recado = { 
-            id: String(Math.floor(Math.random() * Date.now())),
+            uid: uuidv4(),
             titulo: titulo,
             descricao: descricao,           
-            userId:userlogado.id
+            userId: userLogado!, //garantir que tem usuario logado para salvar recado
+            editOn: false,
         }
-       setDescricao('')
+
+        setDescricao('')
         setTitulo('')
    
         dispacth(setNewRecado(novoRecado))
       }     
        
-    
-
-
     return (
         <>
             <UserBar usuario={'odete'}/>

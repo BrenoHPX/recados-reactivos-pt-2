@@ -18,6 +18,12 @@ const store=configureStore({
     devTools: process.env.NODE_ENV !== 'production',
 })
 
+// Exportando o Roostate para poder ler de fora
+export type RootState = ReturnType<typeof store.getState>;
+
+// Export um Disparador
+export type AppDispatch = typeof store.dispatch;
+
 const persistor=persistStore(store)
 
 export{store,persistor}

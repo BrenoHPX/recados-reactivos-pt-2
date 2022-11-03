@@ -10,8 +10,8 @@ export type User = {
 }
 export type UserLogado = {
     id:string,
-    nome:string,
-    avatar:string,
+    nome?:string,
+    avatar?:string,
 }
 
 export type UserState={
@@ -37,6 +37,7 @@ const initialState:UserState={
 }
 
 export const userSelectAll=(state:SoulTechState)=>state.usuarios
+export const userSelectLogged=(state:SoulTechState)=>state.usuarios.userOn
 
 const userSlice=createSlice({
     name:'usuarios',
